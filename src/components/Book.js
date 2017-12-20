@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 
 class Book extends React.Component {
-    state = { shelf: '' };
+    state = { shelf: this.props.bookdata.shelf };
 
     render() {
         return (
@@ -10,7 +10,7 @@ class Book extends React.Component {
               <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.bookdata.imageLinks.thumbnail})` }}></div>
                 <div className="book-shelf-changer">
-                  <select>
+                  <select value={this.state.shelf}>
                     <option value="none" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
