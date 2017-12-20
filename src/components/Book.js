@@ -20,7 +20,22 @@ class Book extends React.Component {
                 </div>
               </div>
               <div className="book-title">{this.props.bookdata.title}</div>
-              <div className="book-authors">Harper Lee</div>
+              <div className="book-authors">
+                {this.props.bookdata.authors.map((author, index, arr) => {
+                        if(index === arr.length - 1) {
+                            return author
+                        }
+                        else {
+                            return `${author}, `;
+                        }
+                    })
+                }
+              </div>
+
+
+
+
+
             </div>
 
         );
