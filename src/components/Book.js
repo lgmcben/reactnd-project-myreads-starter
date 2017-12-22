@@ -5,9 +5,9 @@ class Book extends React.Component {
     state = { shelf: this.props.bookdata.shelf };
 
     onChangeShelf = (event) => {
+      this.props.onChangeShelf({id: this.props.bookdata.id}, event.target.value);
       this.setState({shelf: event.target.value});
-      console.log('Book onChangeShelf(), event.target.value = ', event.target.value);
-
+      //console.log('Book onChangeShelf(), event.target.value = ', event.target.value);
     }
 
     render() {

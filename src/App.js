@@ -16,13 +16,29 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshAllShelves();
+  }
+
+  refreshAllShelves = () => {
     BooksAPI.getAll().then( (books) => {
       this.setState({books});
       console.log(this.state);
     });
   }
 
+  onChangeShelf = (id, shelf) => {
+    console.log('App onChangeShelf() id = ' + id + " | shelf = " + shelf);
+    BooksAPI.update(id, shelf).then( (response) => {
+      console.log('BooksAPI.update() response =' + response);
+      BooksAPI.getAll().then( (books) => {
+        this.setState({books});
+        console.log(this.state);
+      });
+    });
+  }
+
   render() {
+    console.log('BooksApp state = ' + this.state);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -59,7 +75,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {this.state.books ? this.state.books.map(bookdata =>
                           <li key={bookdata.id}>
-                            { bookdata.shelf === Constants.SHELF_CURRENTLY_READING && <Book bookdata={bookdata} /> }
+                            { bookdata.shelf === Constants.SHELF_CURRENTLY_READING && <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} /> }
                           </li>
                         ) : (<span>Loading...</span>)
                       }
@@ -72,7 +88,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {this.state.books ? this.state.books.map(bookdata =>
                           <li key={bookdata.id}>
-                            { bookdata.shelf === Constants.SHELF_WANT_TO_READ && <Book bookdata={bookdata} /> }
+                            { bookdata.shelf === Constants.SHELF_WANT_TO_READ && <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} /> }
                           </li>
                         ) : (<span>Loading...</span>)
                       }
@@ -85,7 +101,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {this.state.books ? this.state.books.map(bookdata =>
                           <li key={bookdata.id}>
-                            { bookdata.shelf === Constants.SHELF_READ && <Book bookdata={bookdata} /> }
+                            { bookdata.shelf === Constants.SHELF_READ && <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} /> }
                           </li>
                         ) : (<span>Loading...</span>)
                       }
