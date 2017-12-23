@@ -1,15 +1,22 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import * as BooksAPI from '../BooksAPI'
 import Constants from '../Constants'
 import Book from './Book'
 
 class Search extends React.Component {
 	state = {
-		query: ''
+		query: '',
+		searchResults: []
 	};
 
 	updateQuery = (query) => {
-		this.setState({ query: query.trim() })
+		let searchQuery = query.trim();
+		this.setState({ query: searchQuery })
+		BooksAPI.search(searchQuery).then((searchResults) => {
+	      console.log(searchResults);
+	      //this.setState(searchResults)
+	    });
 	}
 
 	render() {
