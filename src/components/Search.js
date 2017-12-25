@@ -15,6 +15,13 @@ class Search extends React.Component {
     	this.loadBooksOnShelf();
   	}
 
+    onChangeShelf = (id, shelf) => {
+        console.log('App onChangeShelf() id = ' + id + " | shelf = " + shelf);
+        BooksAPI.update(id, shelf).then( (response) => {
+          console.log('BooksAPI.update() response =' + response);
+        });
+    }
+
 	loadBooksOnShelf = () => {
     	BooksAPI.getAll().then( (booksOnShelf) => {
             const bookIdsOnShelf = booksOnShelf.map(book => book.id);
@@ -27,8 +34,17 @@ class Search extends React.Component {
 		let searchQuery = query.trim();
 		this.setState({ query: searchQuery })
 		BooksAPI.search(searchQuery).then((searchResults) => {
-	      console.log(searchResults);
-	      this.setState({searchResults});
+	      console.log('searchResults', searchResults);
+          const mergedResults = searchResults.map( bookObjectInSearchResult => {
+                if(this.state.bookIdsOnShelf.includes(bookObjectInSearchResult.id)){
+                    const thisBookWithShelfProperty = this.state.booksOnShelf.find(bookOnShelf => bookOnShelf.id === bookObjectInSearchResult.id)
+                    return thisBookWithShelfProperty
+                }else{
+                    return bookObjectInSearchResult
+                }
+            });
+          console.log('resultsWithoutBooksOnShelf', mergedResults);
+	      this.setState({searchResults: mergedResults});
 	    });
 	}
 
@@ -58,7 +74,7 @@ class Search extends React.Component {
 	              <ol className="books-grid">
 	              	{this.state.searchResults.length > 0 ? this.state.searchResults.map(bookdata =>
                           <li key={bookdata.id}>
-                            <Book bookdata={bookdata} /> }
+                            <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} shelf={bookdata.shelf}/> }
                           </li>
                         ) : null
                     }
