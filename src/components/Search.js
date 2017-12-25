@@ -15,7 +15,7 @@ class Search extends React.Component {
 		this.setState({ query: searchQuery })
 		BooksAPI.search(searchQuery).then((searchResults) => {
 	      console.log(searchResults);
-	      //this.setState(searchResults)
+	      this.setState({searchResults});
 	    });
 	}
 
@@ -33,17 +33,18 @@ class Search extends React.Component {
 	                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 	                  you don't find a specific author or title. Every search is limited by search terms.
 	                */}
-	                <input type="text" 
+	                <input type="text"
 	                	   placeholder="Search by title or author"
 	                	   value={this.state.query}
 	                	   onChange={(event) => this.updateQuery(event.target.value)}/>
 	              </div>
 	            </div>
 	            <div className="search-books-results">
+
 	              <ol className="books-grid">
-	              	{this.state.books ? this.state.books.map(bookdata =>
+	              	{this.state.searchResults.length > 0 ? this.state.searchResults.map(bookdata =>
                           <li key={bookdata.id}>
-                            { bookdata.shelf === Constants.SHELF_CURRENTLY_READING && <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} /> }
+                            <Book bookdata={bookdata} /> }
                           </li>
                         ) : null
                     }
