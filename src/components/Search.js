@@ -1,14 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from '../BooksAPI'
-import Constants from '../Constants'
 import Book from './Book'
 
 class Search extends React.Component {
 	state = {
 		query: '',
-		searchResults: []
+		searchResults: [],
+        booksOnShelf:[],
+		bookIdsOnShelf: []
 	};
+
+	componentDidMount() {
+    	this.loadBooksOnShelf();
+  	}
+
+	loadBooksOnShelf = () => {
+    	BooksAPI.getAll().then( (booksOnShelf) => {
+            const bookIdsOnShelf = booksOnShelf.map(book => book.id);
+            console.log('bookIdsOnShelf = ' + bookIdsOnShelf);
+            this.setState({booksOnShelf: booksOnShelf, bookIdsOnShelf: bookIdsOnShelf});
+		});
+  	}
 
 	updateQuery = (query) => {
 		let searchQuery = query.trim();
@@ -20,7 +33,9 @@ class Search extends React.Component {
 	}
 
 	render() {
+		console.log("Search, state = ", this.state);
 		return (
+
 			<div className="search-books">
 	            <div className="search-books-bar">
 	              <Link to="/" className="close-search">Close</Link>
@@ -40,7 +55,6 @@ class Search extends React.Component {
 	              </div>
 	            </div>
 	            <div className="search-books-results">
-
 	              <ol className="books-grid">
 	              	{this.state.searchResults.length > 0 ? this.state.searchResults.map(bookdata =>
                           <li key={bookdata.id}>
