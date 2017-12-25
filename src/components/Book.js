@@ -24,14 +24,14 @@ class Book extends React.Component {
               </div>
               <div className="book-title">{this.props.bookdata.title}</div>
               <div className="book-authors">
-                {this.props.bookdata.authors.map((author, index, arr) => {
+                {(typeof this.props.bookdata.authors !== "undefined" && this.props.bookdata.authors.length > 0) ? this.props.bookdata.authors.map((author, index, arr) => {
                         if(index === arr.length - 1) {
                             return author
                         }
                         else {
                             return `${author}, `;
                         }
-                    })
+                    }) : null
                 }
               </div>
 
