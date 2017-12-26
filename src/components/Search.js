@@ -31,7 +31,7 @@ class Search extends React.Component {
   	}
 
 	updateQuery = (query) => {
-		let searchQuery = query.trim();
+		let searchQuery = query;
 		this.setState({ query: searchQuery })
 		BooksAPI.search(searchQuery).then((searchResults) => {
 	      console.log('searchResults', searchResults);
@@ -54,7 +54,12 @@ class Search extends React.Component {
 
 			<div className="search-books">
 	            <div className="search-books-bar">
-	              <Link to="/" className="close-search">Close</Link>
+	              <Link to={{
+                      pathname: '/',
+                      state: { reload: true }
+                    }}
+
+                    className="close-search">Close</Link>
 	              <div className="search-books-input-wrapper">
 	                {/*
 	                  NOTES: The search from BooksAPI is limited to a particular set of search terms.

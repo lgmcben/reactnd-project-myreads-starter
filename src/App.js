@@ -21,6 +21,12 @@ class BooksApp extends React.Component {
     this.refreshAllShelves();
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps, current props = ', this.props);
+    console.log('componentWillReceiveProps, nextProps = ', nextProps);
+    this.refreshAllShelves();
+  }
+
   refreshAllShelves = () => {
     BooksAPI.getAll().then( (books) => {
       this.setState({books});
@@ -37,7 +43,8 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    console.log('BooksApp state = ' + this.state);
+    console.log('BooksApp render() state = ', this.state);
+    console.log('BooksApp render() props = ', this.props);
     return (
       <div className="app">
         <Route exact path="/" render={() => (
