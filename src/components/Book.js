@@ -2,18 +2,27 @@ import React from 'react'
 import '../App.css'
 
 class Book extends React.Component {
+
+    state = {shelf: 'none'};
+
+    componentDidMount() {
+      this.setState({shelf: this.props.bookdata.shelf});
+    }
+
     onChangeShelf = (event) => {
       this.props.onChangeShelf({id: this.props.bookdata.id}, event.target.value);
+      this.setState({shelf: event.target.value});
       //console.log('Book onChangeShelf(), event.target.value = ', event.target.value);
     }
 
     render() {
+        console.log('Book render() state = ', this.state);
         return (
             <div className="book">
               <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.bookdata.imageLinks.thumbnail})` }}></div>
                 <div className="book-shelf-changer">
-                  <select value={this.props.bookdata.shelf} onChange={this.onChangeShelf}>
+                  <select value={this.state.shelf} onChange={this.onChangeShelf}>
                     <option value="none" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>

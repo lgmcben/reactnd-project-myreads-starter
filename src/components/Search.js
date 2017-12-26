@@ -18,7 +18,7 @@ class Search extends React.Component {
     onChangeShelf = (id, shelf) => {
         console.log('App onChangeShelf() id = ' + id + " | shelf = " + shelf);
         BooksAPI.update(id, shelf).then( (response) => {
-          console.log('BooksAPI.update() response =' + response);
+          console.log('BooksAPI.update() response = ', response);
         });
     }
 
