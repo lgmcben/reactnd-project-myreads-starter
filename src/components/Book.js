@@ -1,5 +1,4 @@
 import React from 'react'
-import '../App.css'
 
 class Book extends React.Component {
 
@@ -10,9 +9,10 @@ class Book extends React.Component {
     }
 
     onChangeShelf = (event) => {
+      //console.log('Book onChangeShelf(), event.target.value = ', event.target.value);
+      // Notify parent component that this book is now moved to another shelf
       this.props.onChangeShelf({id: this.props.bookdata.id}, event.target.value);
       this.setState({shelf: event.target.value});
-      //console.log('Book onChangeShelf(), event.target.value = ', event.target.value);
     }
 
     render() {
@@ -33,6 +33,7 @@ class Book extends React.Component {
               </div>
               <div className="book-title">{this.props.bookdata.title}</div>
               <div className="book-authors">
+                // show list of authors separated by commas. Don't add a comma at the end of last author.
                 {(typeof this.props.bookdata.authors !== "undefined" && this.props.bookdata.authors.length > 0) ? this.props.bookdata.authors.map((author, index, arr) => {
                         if(index === arr.length - 1) {
                             return author
@@ -43,13 +44,7 @@ class Book extends React.Component {
                     }) : null
                 }
               </div>
-
-
-
-
-
             </div>
-
         );
     }
 }

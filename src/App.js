@@ -8,43 +8,32 @@ import Book from './components/Book'
 import Search from './components/Search'
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-  }
+  state = {};
 
   componentDidMount() {
     this.refreshAllShelves();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps, current props = ', this.props);
-    console.log('componentWillReceiveProps, nextProps = ', nextProps);
+    //console.log('componentWillReceiveProps, current props = ', this.props);
+    //console.log('componentWillReceiveProps, nextProps = ', nextProps);
+    // componentWillReceiveProps is called on a component that were mounted before, and are still mounted. Source https://github.com/ReactTraining/react-router/blob/86f5e2bd45a1d2419e36372cea649dddedee5f29/docs/ComponentLifecycleWhenRouting.md
     this.refreshAllShelves();
   }
 
   refreshAllShelves = () => {
     BooksAPI.getAll().then( (books) => {
       this.setState({books});
-      console.log(this.state);
     });
   }
 
   onChangeShelf = (id, shelf) => {
-    console.log('App onChangeShelf() id = ' + id + " | shelf = " + shelf);
     BooksAPI.update(id, shelf).then( (response) => {
-      console.log('BooksAPI.update() response =' + response);
       this.refreshAllShelves();
     });
   }
 
   render() {
-    console.log('BooksApp render() state = ', this.state);
-    console.log('BooksApp render() props = ', this.props);
     return (
       <div className="app">
         <Route exact path="/" render={() => (
