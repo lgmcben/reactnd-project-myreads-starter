@@ -6,7 +6,7 @@ Of course, you are free to start this project from scratch if you wish! Just be 
 
 ## TL;DR
 
-To get started developing right away:
+How to run the application:
 
 * install all project dependencies with `npm install`
 * start the development server with `npm start`
@@ -63,7 +63,7 @@ update(book, shelf)
 ```
 
 * book: `<Object>` containing at minimum an `id` attribute
-* shelf: `<String>` contains one of ["wantToRead", "currentlyReading", "read"]  
+* shelf: `<String>` contains one of ["wantToRead", "currentlyReading", "read"]
 * Returns a Promise which resolves to a JSON object containing the response data of the POST request
 
 ### `search`
