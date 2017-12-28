@@ -15,9 +15,9 @@ class BooksApp extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // componentWillReceiveProps() is called when user navigate from/to a component that were mounted before, and are still mounted. Source: https://github.com/ReactTraining/react-router/blob/86f5e2bd45a1d2419e36372cea649dddedee5f29/docs/ComponentLifecycleWhenRouting.md
     //console.log('componentWillReceiveProps, current props = ', this.props);
     //console.log('componentWillReceiveProps, nextProps = ', nextProps);
-    // componentWillReceiveProps is called on a component that were mounted before, and are still mounted. Source https://github.com/ReactTraining/react-router/blob/86f5e2bd45a1d2419e36372cea649dddedee5f29/docs/ComponentLifecycleWhenRouting.md
     this.refreshAllShelves();
   }
 

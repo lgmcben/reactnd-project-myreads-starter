@@ -7,8 +7,8 @@ class Search extends React.Component {
 	state = {
 		query: '',
 		searchResults: [],
-        booksOnShelf:[],
-		bookIdsOnShelf: []
+        booksOnShelf:[], // For displaying correct book state(which shelf they're in) in search results
+		bookIdsOnShelf: [] // For keeping track of which books are on a shelf
 	};
 
 	componentDidMount() {
@@ -16,17 +16,19 @@ class Search extends React.Component {
   	}
 
     onChangeShelf = (id, shelf) => {
-        console.log('App onChangeShelf() id = ' + id + " | shelf = " + shelf);
-        BooksAPI.update(id, shelf).then( (response) => {
-          console.log('BooksAPI.update() response = ', response);
-        });
+        // console.log('App onChangeShelf() id = ' + id + " | shelf = " + shelf);
+        // BooksAPI.update(id, shelf).then( (response) => {
+        //   console.log('BooksAPI.update() response = ', response);
+        // });
+        BooksAPI.update(id, shelf);
     }
 
 	loadBooksOnShelf = () => {
     	BooksAPI.getAll().then( (booksOnShelf) => {
+            // Create an array of book ids that are on a shelf
             const bookIdsOnShelf = booksOnShelf.map(book => book.id);
-            console.log('bookIdsOnShelf = ' + bookIdsOnShelf);
             this.setState({booksOnShelf: booksOnShelf, bookIdsOnShelf: bookIdsOnShelf});
+            //console.log('bookIdsOnShelf = ', bookIdsOnShelf);
 		});
   	}
 
@@ -34,57 +36,42 @@ class Search extends React.Component {
 		let searchQuery = query;
 		this.setState({ query: searchQuery })
 		BooksAPI.search(searchQuery).then((searchResults) => {
-	      console.log('searchResults', searchResults);
-          const mergedResults = searchResults.map( bookObjectInSearchResult => {
-                if(this.state.bookIdsOnShelf.includes(bookObjectInSearchResult.id)){
-                    const thisBookWithShelfProperty = this.state.booksOnShelf.find(bookOnShelf => bookOnShelf.id === bookObjectInSearchResult.id)
-                    return thisBookWithShelfProperty
+	      // Using map(), create an array of final search results that has correct 'shelf' property
+          const finalResults = searchResults.map( bookInSearchResult => {
+                if(this.state.bookIdsOnShelf.includes(bookInSearchResult.id)){ // Is this book on the shelf?
+                    const sameBookWithShelfProperty = this.state.booksOnShelf.find(bookOnShelf => bookOnShelf.id === bookInSearchResult.id)
+                    return sameBookWithShelfProperty // Return book object that contain 'shelf' property
                 }else{
-                    return bookObjectInSearchResult
+                    return bookInSearchResult // Return book object with no 'shelf' property
                 }
             });
-          console.log('resultsWithoutBooksOnShelf', mergedResults);
-	      this.setState({searchResults: mergedResults});
+          //console.log('resultsWithoutBooksOnShelf', finalResults);
+	      this.setState({searchResults: finalResults});
 	    });
 	}
 
 	render() {
-		console.log("Search, state = ", this.state);
 		return (
-
 			<div className="search-books">
-	            <div className="search-books-bar">
-	              <Link to={{
-                      pathname: '/',
-                      state: { reload: true }
-                    }}
-
-                    className="close-search">Close</Link>
+	          <div className="search-books-bar">
+	            <Link className="close-search" to="/">Close</Link>
 	              <div className="search-books-input-wrapper">
-	                {/*
-	                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-	                  You can find these search terms here:
-	                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-	                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-	                  you don't find a specific author or title. Every search is limited by search terms.
-	                */}
 	                <input type="text"
-	                	   placeholder="Search by title or author"
+	               	       placeholder="Search by title or author"
 	                	   value={this.state.query}
 	                	   onChange={(event) => this.updateQuery(event.target.value)}/>
 	              </div>
-	            </div>
-	            <div className="search-books-results">
-	              <ol className="books-grid">
-	              	{this.state.searchResults.length > 0 ? this.state.searchResults.map(bookdata =>
-                          <li key={bookdata.id}>
-                            <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} shelf={bookdata.shelf}/> }
-                          </li>
-                        ) : null
-                    }
-	              </ol>
-	            </div>
+	          </div>
+	          <div className="search-books-results">
+	            <ol className="books-grid">
+	              {this.state.searchResults.length > 0 ? this.state.searchResults.map(bookdata =>
+                    <li key={bookdata.id}>
+                      <Book bookdata={bookdata} onChangeShelf={this.onChangeShelf} shelf={bookdata.shelf}/> }
+                    </li>
+                    ) : null
+                  }
+	            </ol>
+	          </div>
             </div>
 		);
 	}

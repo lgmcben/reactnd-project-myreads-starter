@@ -35,13 +35,13 @@ class Book extends React.Component {
               <div className="book-authors">
                 // show list of authors separated by commas. Don't add a comma at the end of last author.
                 {(typeof this.props.bookdata.authors !== "undefined" && this.props.bookdata.authors.length > 0) ? this.props.bookdata.authors.map((author, index, arr) => {
-                        if(index === arr.length - 1) {
-                            return author
-                        }
-                        else {
-                            return `${author}, `;
-                        }
-                    }) : null
+                      if(index === arr.length - 1) {
+                        return author
+                      } else {
+                        return `${author}, `;
+                      }
+                    }
+                  ) : null
                 }
               </div>
             </div>
